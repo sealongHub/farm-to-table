@@ -1,0 +1,7 @@
+package farm_to_table.farm_to_table.Repository;
+
+import farm_to_table.farm_to_table.model.ProductEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+}
