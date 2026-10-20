@@ -5,10 +5,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 @Slf4j
@@ -26,9 +28,21 @@ public class GlobalExceptionHandler {
                 .body(e.getMessage());
     }
 
-    // ===== UserDetail =====
+    // ===== សិទ្ធិ (403) សម្រាប់ @PreAuthorize / method security =====
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> accessDenied(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("អ្នកមិនមានសិទ្ធិចូលប្រើប្រាស់ធនធាននេះទេ");
+    }
 
-    // រកមិនឃើញ User Detail → 404
+    // ===== ResponseStatusException (404 ពី Product/Category service) =====
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<String> responseStatus(ResponseStatusException e) {
+        return ResponseEntity.status(e.getStatusCode())
+                .body(e.getReason());
+    }
+
+    // ===== UserDetail =====
     @ExceptionHandler(UserDetailNotFoundException.class)
     public ResponseEntity<String> userDetailNotFound(UserDetailNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -40,7 +54,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> invalidBody(HttpMessageNotReadableException e) {
         log.warn("Invalid request body: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("ទិន្នន័យដែលផ្ញើមិនត្រឹមត្រូវ (ពិនិត្យ JSON និង dateOfBirth ជា yyyy-MM-dd)");
+                .body("ទិន្នន័យដែលផ្ញើមិនត្រឹមត្រូវ (ពិនិត្យ JSON និងទ្រង់ទ្រាយ date ជា yyyy-MM-dd)");
     }
 
     // ទិន្នន័យស្ទួន ឬខ្វះ field ដែលចាំបាច់ក្នុង DB → 409
@@ -48,7 +62,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> dataIntegrity(DataIntegrityViolationException e) {
         log.error("Data integrity violation", e);
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body("ទិន្នន័យស្ទួន ឬមិនគ្រប់គ្រាន់ (ឧ. cardId ស្ទួន)");
+                .body("ទិន្នន័យស្ទួន ឬមិនគ្រប់គ្រាន់");
     }
 
     // ចុងក្រោយ: error ផ្សេងៗ → 500

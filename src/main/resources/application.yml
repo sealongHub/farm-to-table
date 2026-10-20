@@ -2,11 +2,10 @@ spring:
   application:
     name: farm-to-table
 
-
   datasource:
     url: jdbc:postgresql://localhost:8080/farm_to_table
-    username: long_postgre
-    password: long12345
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,11 +15,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8081
+  port: 8082
 
 jwt:
-  secret: 7ulxgAvsOyaMGZ1Ubv7E9G+hi/lPDthOu/Knxux+WzFemMpOuHV56DPsd41VC9r5FzI0LDFho+6PsXdE6pccuA==
+  secret: ${JWT_SECRET}
   expiration: 86400000

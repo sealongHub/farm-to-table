@@ -1,10 +1,9 @@
 package farm_to_table.farm_to_table.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -12,7 +11,10 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class ProductEntity extends BaseEntity{
+@Table(name = "tbl_product")
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +24,12 @@ public class ProductEntity extends BaseEntity{
     private Integer qty;
     private Double unitPrice;
     private Double farmerPrice;
+
+    @Temporal(TemporalType.DATE)
     private Date expectedHavestDate;
-    private Date epireDate;
+
+    @Temporal(TemporalType.DATE)
+    private Date expiredDate;
+
     private String location;
 }
