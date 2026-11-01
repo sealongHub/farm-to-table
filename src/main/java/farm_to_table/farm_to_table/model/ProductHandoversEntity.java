@@ -22,5 +22,4 @@ public class ProductHandoversEntity extends BaseEntity{
     private String statusId;
     private String receiveBy;
     private String note;
-
 }

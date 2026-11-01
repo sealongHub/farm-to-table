@@ -18,6 +18,4 @@ public class WarehouseStockEntity extends BaseEntity{
     private String productId;
     private Integer qty;
     private Integer reservedQty;
-
-
 }

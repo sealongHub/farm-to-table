@@ -1,20 +1,21 @@
 package farm_to_table.farm_to_table.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity (name = "product_image_entity")
+@Entity
+@Table(name = "product_image_entity")
 @Getter
 @Setter
-
-public class ProductImageEntity extends BaseEntity{
+public class ProductImageEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String productId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductEntity product;
+
     private String path;
 }
